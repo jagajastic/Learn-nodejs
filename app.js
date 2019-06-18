@@ -1,5 +1,5 @@
+const Joi = require("joi");
 // import express
-
 const express = require("express");
 const app = express();
 
@@ -21,6 +21,23 @@ app.get("/api/courses", function(req, res) {
 });
 
 app.post("/api/courses", (req, res) => {
+  // validating input from client, never trust client data
+  // using joi package for your validation
+  // note joi is a class model so use Pascal case to name it
+  // next define a schema for your object that you are expecting from the client end
+  const schema = {
+    name: Joi.string()
+      .min(3)
+      .required()
+  };
+  // validate the input
+  const result = Joi.validate(req.body, schema);
+  // if error send error to client
+  // simplify the error message send to the client to easy of rendering
+  if (result.error)
+    return res.status(400).send(result.error.details[0].message );
+
+  console.log(result);
   const course = {
     id: courses.length + 1,
     name: req.body.name
