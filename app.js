@@ -3,11 +3,14 @@
 const express = require("express");
 const app = express();
 
+// parsing the body
+app.use(express.json());
+
 // model course in array
 const courses = [
-  { id: 1, courae: "course1" },
-  { id: 2, courae: "course2" },
-  { id: 3, courae: "course3" }
+  { id: 1, course: "course1" },
+  { id: 2, course: "course2" },
+  { id: 3, course: "course3" }
 ];
 app.get("/", function(req, res) {
   res.send("Hello world!!");
@@ -17,6 +20,14 @@ app.get("/api/courses", function(req, res) {
   res.send(courses);
 });
 
+app.post("/api/courses", (req, res) => {
+  const course = {
+    id: courses.length + 1,
+    name: req.body.name
+  };
+  courses.push(course);
+  res.send(course);
+});
 // get book by id
 app.get("/api/courses/:id", (req, res) => {
   //  loop over course to find the course you are looking for
