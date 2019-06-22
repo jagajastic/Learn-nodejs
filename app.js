@@ -9,6 +9,9 @@ const app = express();
 
 // parsing the body
 app.use(express.json());
+// serving status file
+app.use(express.static('public'));
+// 
 
 // adding middleware function to your app
 app.use(logger);
