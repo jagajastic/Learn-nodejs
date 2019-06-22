@@ -10,8 +10,9 @@ const app = express();
 // parsing the body
 app.use(express.json());
 // serving status file
-app.use(express.static('public'));
-// 
+app.use(express.static("public"));
+// add urlencoded middlewware
+app.use(express.urlencoded({ extended: true }));
 
 // adding middleware function to your app
 app.use(logger);
