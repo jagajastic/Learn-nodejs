@@ -1,4 +1,8 @@
 const Joi = require("joi");
+// import the logger middleware
+const logger = require("./logger");
+// import authentication middleware
+const auth = require("./authenticate");
 // import express
 const express = require("express");
 const app = express();
@@ -7,16 +11,10 @@ const app = express();
 app.use(express.json());
 
 // adding middleware function to your app
-app.use(function(req, res, next) {
-  console.log("Logging...");
-  next(); // this move to the next middle ware function
-});
+app.use(logger);
 
 // add authentication middleware f unction
-app.use((req, res, next) => {
-  console.log("Authenticating...");
-  next();
-});
+app.use(auth);
 
 // model course in array
 const courses = [
