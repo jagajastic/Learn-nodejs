@@ -1,3 +1,8 @@
+//import helmet for setting http headers
+const helmet = require("helmet");
+// import morgan for logging request
+const morgan = require("morgan");
+// joi for validating params
 const Joi = require("joi");
 // import the logger middleware
 const logger = require("./logger");
@@ -13,6 +18,8 @@ app.use(express.json());
 app.use(express.static("public"));
 // add urlencoded middlewware
 app.use(express.urlencoded({ extended: true }));
+app.use(helmet());
+app.use(morgan("tiny"));
 
 // adding middleware function to your app
 app.use(logger);
