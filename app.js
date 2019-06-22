@@ -6,6 +6,18 @@ const app = express();
 // parsing the body
 app.use(express.json());
 
+// adding middleware function to your app
+app.use(function(req, res, next) {
+  console.log("Logging...");
+  next(); // this move to the next middle ware function
+});
+
+// add authentication middleware f unction
+app.use((req, res, next) => {
+  console.log("Authenticating...");
+  next();
+});
+
 // model course in array
 const courses = [
   { id: 1, name: "course1" },
@@ -43,7 +55,8 @@ app.get("/api/courses/:id", (req, res) => {
   const course = courses.find(c => c.id === parseInt(req.params.id));
 
   // send message if not found
-  if (!course) res.status(404).send("The course withthe given ID is not found");
+  if (!course)
+    return res.status(404).send("The course withthe given ID is not found");
   // return found course
   return res.send(course);
 });
@@ -64,8 +77,21 @@ app.put("/api/courses/:id", (req, res) => {
   // return the course to the client
   course.name = req.body.name;
   res.status(200).send(course);
-}); 
+});
 
+// implement delete
+app.delete("/api/courses/:id", (req, res) => {
+  // lookup the course and validate the course
+  const course = courses.find(c => c.id === parseInt(req.params.id));
+  if (!course) return res.status(404).send(`Course not found`);
+
+  // delete the course from the database
+  const index = courses.indexOf(course);
+  // use splica to delete the item from db
+  courses.splice(index, 1);
+
+  res.send(course);
+});
 // date and month in the request params
 // app.get("/api/post/:year/:month", (req, res) => {
 //   res.send(req.params);
