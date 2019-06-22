@@ -19,8 +19,11 @@ app.use(express.static("public"));
 // add urlencoded middlewware
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(morgan("tiny"));
 
+// setting morgan to run in development mode
+if (app.get("env") === "development") {
+  app.use(morgan("tiny"));
+}
 // adding middleware function to your app
 app.use(logger);
 
