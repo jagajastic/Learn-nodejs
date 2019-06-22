@@ -25,17 +25,11 @@ app.post("/api/courses", (req, res) => {
   // using joi package for your validation
   // note joi is a class model so use Pascal case to name it
   // next define a schema for your object that you are expecting from the client end
-  const schema = {
-    name: Joi.string()
-      .min(3)
-      .required()
-  };
-  // validate the input
-  const result = Joi.validate(req.body, schema);
+  const { error } = validateCourse(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
   // if error send error to client
   // simplify the error message send to the client to easy of rendering
-  if (result.error)
-    return res.status(400).send(result.error.details[0].message);
+
   const course = {
     id: courses.length + 1,
     name: req.body.name
@@ -59,25 +53,19 @@ app.put("/api/courses/:id", (req, res) => {
   // first of all look up the course in db
   // if not exist return 4040(not found)
   const course = courses.find(c => c.id === parseInt(req.params.id));
-  if (!course)
-    return res.status(404).send(`Course with ID ${courseId} not found`);
+  if (!course) return res.status(404).send(`Course not found`);
 
   // validate the course
   // if invalid, return 404 - bad request
-  const schema = {
-    name: Joi.string()
-      .min(3)
-      .required()
-  };
-  const result = Joi.validate(req.body, schema);
-  if (result.error)
-    return res.status(400).send(result.error.details[0].message);
+  const { error } = validateCourse(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
   // push the value from the user request body to update the course
   // update course
   // return the course to the client
   course.name = req.body.name;
   res.status(200).send(course);
-});
+}); 
+
 // date and month in the request params
 // app.get("/api/post/:year/:month", (req, res) => {
 //   res.send(req.params);
@@ -88,5 +76,16 @@ app.put("/api/courses/:id", (req, res) => {
 //   res.send(req.query);
 // });
 // define an environmental value
+
+//  validate schema function
+function validateCourse(course) {
+  const shema = {
+    name: Joi.string()
+      .min(3)
+      .required()
+  };
+
+  return Joi.validate(course, shema);
+}
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
