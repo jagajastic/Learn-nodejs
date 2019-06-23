@@ -1,3 +1,5 @@
+// import congiuration
+const config = require("config");
 //import helmet for setting http headers
 const helmet = require("helmet");
 // import morgan for logging request
@@ -19,6 +21,11 @@ app.use(express.static("public"));
 // add urlencoded middlewware
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
+
+// configuration
+console.log(`Applicaation Name: ${config.get("name")}`);
+console.log(`Applicaation Host: ${config.get("mail.host")}`);
+// console.log(`Applicaation Password: ${config.get("mail.pass")}`);  // bug, it keeps say mail.password is not define
 
 // setting morgan to run in development mode
 if (app.get("env") === "development") {
