@@ -1,0 +1,6 @@
+{
+  "name": "My Epress App -- Production",
+  "mail": {
+    "host": "pro-mail-server"
+  }
+}

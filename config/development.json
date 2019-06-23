@@ -1,0 +1,6 @@
+{
+    "name": "My Epress App -- Development",
+    "mail": {
+        "host": "dev-mail-server"
+    }
+}
